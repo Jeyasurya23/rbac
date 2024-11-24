@@ -34,7 +34,6 @@ const Login = () => {
       setPassword('');
     }
   };
-  
 
   return (
     <Container fluid className="bg-secondary min-vh-100">
@@ -53,6 +52,7 @@ const Login = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
+                    autoComplete="username"
                   />
                 </Form.Group>
 
@@ -65,10 +65,16 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    autoComplete="current-password"
                   />
                 </Form.Group>
 
-                <Button variant="primary"type="submit"size="lg"className="w-100 mb-4">
+                <Button
+                  variant="primary"
+                  type="submit"
+                  size="lg"
+                  className="w-100 mb-4"
+                >
                   Login
                 </Button>
               </Form>
