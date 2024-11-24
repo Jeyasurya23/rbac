@@ -20,11 +20,13 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const user = users[username];
-    
-    if (user && user.password === password) {
+  
+    const normalizedUsername = username.toLowerCase();
+    const user = users[normalizedUsername];
+  
+    if (user && user.password.toLowerCase() === password.toLowerCase()) {
       localStorage.setItem('userRole', user.role);
-      localStorage.setItem('username', username);
+      localStorage.setItem('username', normalizedUsername);
       navigate('/dashboard');
       toast.success(`Welcome back, ${username}!`);
     } else {
@@ -32,6 +34,7 @@ const Login = () => {
       setPassword('');
     }
   };
+  
 
   return (
     <Container fluid className="bg-secondary min-vh-100">
@@ -65,28 +68,25 @@ const Login = () => {
                   />
                 </Form.Group>
 
-                <Button 
-                  variant="primary" 
-                  type="submit"
-                  size="lg"
-                  className="w-100 mb-4"
-                >
+                <Button variant="primary"type="submit"size="lg"className="w-100 mb-4">
                   Login
                 </Button>
               </Form>
-              
+
               <div className="bg-light p-3 rounded-3">
                 <h6 className="text-center mb-3">Demo Credentials</h6>
                 <Row className="g-2 text-center">
                   <Col xs={12} sm={6}>
                     <div className="p-2 border rounded">
-                      <strong>Admin</strong><br/>
+                      <strong>Admin</strong>
+                      <br />
                       admin / admin123
                     </div>
                   </Col>
                   <Col xs={12} sm={6}>
                     <div className="p-2 border rounded">
-                      <strong>User</strong><br/>
+                      <strong>User</strong>
+                      <br />
                       user / user123
                     </div>
                   </Col>

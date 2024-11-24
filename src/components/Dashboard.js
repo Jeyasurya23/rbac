@@ -1,15 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Table, Button, Modal, Form, Badge, Row, Col, Card } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import { FaEdit, FaTrash, FaToggleOn, FaToggleOff, FaPlus } from 'react-icons/fa';
 
 function Dashboard() {
   const userRole = localStorage.getItem('userRole');
   const username = localStorage.getItem('username');
   const isAdmin = userRole === 'admin';
+
   const [showModal, setShowModal] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [data, setData] = useState([
+  const [data, setData] = useState([]);
+
+  // Default employee data
+  const initialData = [
     { id: 1, name: 'Ram Kumar', jobRole: 'Full Stack Developer', status: 'Active' },
     { id: 2, name: 'Arun Prakash', jobRole: 'HR Manager', status: 'Active' },
     { id: 3, name: 'Priya Sharma', jobRole: 'Project Manager', status: 'Active' },
@@ -20,7 +25,21 @@ function Dashboard() {
     { id: 8, name: 'Vijay Kumar', jobRole: 'DevOps Engineer', status: 'Active' },
     { id: 9, name: 'Meena Kumari', jobRole: 'Frontend Developer', status: 'Active' },
     { id: 10, name: 'Rajesh Singh', jobRole: 'System Architect', status: 'Inactive' },
-  ]);
+  ];
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem('employeeData'));
+    if (storedData) {
+      setData(storedData);
+    } else {
+      setData(initialData);
+      localStorage.setItem('employeeData', JSON.stringify(initialData));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('employeeData', JSON.stringify(data));
+  }, [data]);
 
   const filteredData = data.filter(
     (item) =>
@@ -92,7 +111,7 @@ function Dashboard() {
                     />
                     {isAdmin && (
                       <Button variant="primary" onClick={() => handleEdit(null)}>
-                        <i className="bi bi-plus-lg me-2"></i>
+                        <FaPlus className="me-2" />
                         Add Employee
                       </Button>
                     )}
@@ -122,19 +141,19 @@ function Dashboard() {
                           <Badge bg={item.status === 'Active' ? 'success' : 'danger'}>{item.status}</Badge>
                         </td>
                         {isAdmin && (
-                          <td>
+                          <td className="text-end">
                             <Button variant="outline-primary" size="sm" onClick={() => handleEdit(item)}>
-                              Edit
-                            </Button>
+                              <FaEdit />
+                            </Button>{' '}
                             <Button
                               variant={item.status === 'Active' ? 'outline-danger' : 'outline-success'}
                               size="sm"
                               onClick={() => handleStatusToggle(item.id)}
                             >
-                              {item.status === 'Active' ? 'Deactivate' : 'Activate'}
-                            </Button>
+                              {item.status === 'Active' ? <FaToggleOff /> : <FaToggleOn />}
+                            </Button>{' '}
                             <Button variant="outline-danger" size="sm" onClick={() => handleDelete(item.id)}>
-                              Delete
+                              <FaTrash />
                             </Button>
                           </td>
                         )}
