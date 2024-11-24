@@ -13,7 +13,6 @@ function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [data, setData] = useState([]);
 
-  // Default employee data
   const initialData = [
     { id: 1, name: 'Ram Kumar', jobRole: 'Full Stack Developer', status: 'Active' },
     { id: 2, name: 'Arun Prakash', jobRole: 'HR Manager', status: 'Active' },
@@ -28,12 +27,16 @@ function Dashboard() {
   ];
 
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem('employeeData'));
-    if (storedData) {
-      setData(storedData);
-    } else {
-      setData(initialData);
+    const isFirstLogin = localStorage.getItem('isFirstLogin');
+    if (!isFirstLogin) {
       localStorage.setItem('employeeData', JSON.stringify(initialData));
+      localStorage.setItem('isFirstLogin', 'false'); 
+      setData(initialData);
+    } else {
+      const storedData = JSON.parse(localStorage.getItem('employeeData'));
+      if (storedData) {
+        setData(storedData);
+      }
     }
   }, []);
 
@@ -49,7 +52,8 @@ function Dashboard() {
   );
 
   const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+    const updatedData = data.filter((item) => item.id !== id);
+    setData(updatedData);
     toast.success('Employee removed successfully');
   };
 
@@ -59,15 +63,10 @@ function Dashboard() {
   };
 
   const handleStatusToggle = (id) => {
-    setData(
-      data.map((item) => {
-        if (item.id === id) {
-          const newStatus = item.status === 'Active' ? 'Inactive' : 'Active';
-          return { ...item, status: newStatus };
-        }
-        return item;
-      })
+    const updatedData = data.map((item) =>
+      item.id === id ? { ...item, status: item.status === 'Active' ? 'Inactive' : 'Active' } : item
     );
+    setData(updatedData);
     toast.success('Status updated successfully');
   };
 
@@ -79,14 +78,16 @@ function Dashboard() {
       return;
     }
 
+    let updatedData;
     if (editItem.id > data.length) {
-      setData([...data, editItem]);
+      updatedData = [...data, editItem];
       toast.success('Employee added successfully');
     } else {
-      setData(data.map((item) => (item.id === editItem.id ? editItem : item)));
+      updatedData = data.map((item) => (item.id === editItem.id ? editItem : item));
       toast.success('Employee updated successfully');
     }
 
+    setData(updatedData);
     setShowModal(false);
     setEditItem(null);
   };
