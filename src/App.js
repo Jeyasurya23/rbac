@@ -13,7 +13,7 @@ function App() {
   };
 
   return (
-    <Router basename="/rbac-admin">
+    <Router basename="/rbac">
       <div className="bg-dark text-white min-vh-100">
         <ToastContainer
           position="top-center"
