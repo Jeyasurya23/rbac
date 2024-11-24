@@ -13,7 +13,7 @@ function App() {
   };
 
   return (
-    <Router>
+    <Router basename="/rbac-admin">
       <ToastContainer
         position="top-center"
         autoClose={2000}
