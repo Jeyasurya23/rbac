@@ -8,6 +8,7 @@ function Dashboard() {
   const isAdmin = userRole === 'admin';
   const [showModal, setShowModal] = useState(false);
   const [editItem, setEditItem] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [data, setData] = useState([
     { id: 1, name: 'Ram Kumar', jobRole: 'Full Stack Developer', status: 'Active' },
     { id: 2, name: 'Arun Prakash', jobRole: 'HR Manager', status: 'Active' },
@@ -18,11 +19,18 @@ function Dashboard() {
     { id: 7, name: 'Lakshmi Priya', jobRole: 'Business Analyst', status: 'Inactive' },
     { id: 8, name: 'Vijay Kumar', jobRole: 'DevOps Engineer', status: 'Active' },
     { id: 9, name: 'Meena Kumari', jobRole: 'Frontend Developer', status: 'Active' },
-    { id: 10, name: 'Rajesh Singh', jobRole: 'System Architect', status: 'Inactive' }
+    { id: 10, name: 'Rajesh Singh', jobRole: 'System Architect', status: 'Inactive' },
   ]);
 
+  const filteredData = data.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.jobRole.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.status.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const handleDelete = (id) => {
-    setData(data.filter(item => item.id !== id));
+    setData(data.filter((item) => item.id !== id));
     toast.success('Employee removed successfully');
   };
 
@@ -32,19 +40,21 @@ function Dashboard() {
   };
 
   const handleStatusToggle = (id) => {
-    setData(data.map(item => {
-      if (item.id === id) {
-        const newStatus = item.status === 'Active' ? 'Inactive' : 'Active';
-        return { ...item, status: newStatus };
-      }
-      return item;
-    }));
+    setData(
+      data.map((item) => {
+        if (item.id === id) {
+          const newStatus = item.status === 'Active' ? 'Inactive' : 'Active';
+          return { ...item, status: newStatus };
+        }
+        return item;
+      })
+    );
     toast.success('Status updated successfully');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!editItem.name || !editItem.jobRole) {
       toast.error('Please fill all fields');
       return;
@@ -54,12 +64,10 @@ function Dashboard() {
       setData([...data, editItem]);
       toast.success('Employee added successfully');
     } else {
-      setData(data.map(item => 
-        item.id === editItem.id ? editItem : item
-      ));
+      setData(data.map((item) => (item.id === editItem.id ? editItem : item)));
       toast.success('Employee updated successfully');
     }
-    
+
     setShowModal(false);
     setEditItem(null);
   };
@@ -72,17 +80,25 @@ function Dashboard() {
             <Card.Body>
               <Row className="align-items-center mb-4">
                 <Col>
-                  <h4 className="mb-1">Employee Management</h4>
-                  <p className="text-muted mb-0">Welcome, {username}</p>
+                  <div className="d-flex align-items-center">
+                    <h4 className="mb-0 me-auto">Employee Management</h4>
+                    <Form.Control
+                      type="text"
+                      placeholder="Search by name, role, or status"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="me-2"
+                      style={{ maxWidth: '300px' }}
+                    />
+                    {isAdmin && (
+                      <Button variant="primary" onClick={() => handleEdit(null)}>
+                        <i className="bi bi-plus-lg me-2"></i>
+                        Add Employee
+                      </Button>
+                    )}
+                  </div>
+                  <p className="text-muted">Welcome, {username}</p>
                 </Col>
-                {isAdmin && (
-                  <Col xs="auto">
-                    <Button variant="primary" onClick={() => handleEdit(null)}>
-                      <i className="bi bi-plus-lg me-2"></i>
-                      Add Employee
-                    </Button>
-                  </Col>
-                )}
               </Row>
 
               <div className="table-responsive">
@@ -97,73 +113,29 @@ function Dashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((item, index) => (
+                    {filteredData.map((item, index) => (
                       <tr key={item.id}>
                         <td className="fw-bold text-muted">{index + 1}</td>
                         <td>{item.name}</td>
                         <td>{item.jobRole}</td>
                         <td>
-                          <Badge bg={item.status === 'Active' ? 'success' : 'danger'}>
-                            {item.status}
-                          </Badge>
+                          <Badge bg={item.status === 'Active' ? 'success' : 'danger'}>{item.status}</Badge>
                         </td>
                         {isAdmin && (
                           <td>
-                            <div className="d-none d-md-flex gap-2 justify-content-end">
-                              <Button 
-                                variant="outline-primary" 
-                                size="sm"
-                                onClick={() => handleEdit(item)}
-                              >
-                                <i className="bi bi-pencil me-1"></i>
-                                Edit
-                              </Button>
-                              <Button 
-                                variant={item.status === 'Active' ? 'outline-danger' : 'outline-success'} 
-                                size="sm"
-                                onClick={() => handleStatusToggle(item.id)}
-                              >
-                                <i className={`bi ${item.status === 'Active' ? 'bi-x-lg' : 'bi-check-lg'} me-1`}></i>
-                                {item.status === 'Active' ? 'Deactivate' : 'Activate'}
-                              </Button>
-                              <Button 
-                                variant="outline-danger" 
-                                size="sm"
-                                onClick={() => handleDelete(item.id)}
-                              >
-                                <i className="bi bi-trash me-1"></i>
-                                Delete
-                              </Button>
-                            </div>
-                            <div className="d-flex d-md-none flex-column gap-2">
-                              <Button 
-                                variant="outline-primary" 
-                                size="sm"
-                                className="w-100 d-flex align-items-center justify-content-center"
-                                onClick={() => handleEdit(item)}
-                              >
-                                <i className="bi bi-pencil me-2"></i>
-                                Edit
-                              </Button>
-                              <Button 
-                                variant={item.status === 'Active' ? 'outline-danger' : 'outline-success'} 
-                                size="sm"
-                                className="w-100 d-flex align-items-center justify-content-center"
-                                onClick={() => handleStatusToggle(item.id)}
-                              >
-                                <i className={`bi ${item.status === 'Active' ? 'bi-x-lg' : 'bi-check-lg'} me-2`}></i>
-                                {item.status === 'Active' ? 'Deactivate' : 'Activate'}
-                              </Button>
-                              <Button 
-                                variant="outline-danger" 
-                                size="sm"
-                                className="w-100 d-flex align-items-center justify-content-center"
-                                onClick={() => handleDelete(item.id)}
-                              >
-                                <i className="bi bi-trash me-2"></i>
-                                Delete
-                              </Button>
-                            </div>
+                            <Button variant="outline-primary" size="sm" onClick={() => handleEdit(item)}>
+                              Edit
+                            </Button>
+                            <Button
+                              variant={item.status === 'Active' ? 'outline-danger' : 'outline-success'}
+                              size="sm"
+                              onClick={() => handleStatusToggle(item.id)}
+                            >
+                              {item.status === 'Active' ? 'Deactivate' : 'Activate'}
+                            </Button>
+                            <Button variant="outline-danger" size="sm" onClick={() => handleDelete(item.id)}>
+                              Delete
+                            </Button>
                           </td>
                         )}
                       </tr>
@@ -182,30 +154,28 @@ function Dashboard() {
             <Modal.Title>{editItem?.id > data.length ? 'Add Employee' : 'Edit Employee'}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form.Group className="mb-3">
+            <Form.Group controlId="employeeName" className="mb-3">
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter name"
+                placeholder="Enter employee name"
                 value={editItem?.name || ''}
                 onChange={(e) => setEditItem({ ...editItem, name: e.target.value })}
-                required
               />
             </Form.Group>
-            <Form.Group className="mb-3">
+            <Form.Group controlId="employeeJobRole" className="mb-3">
               <Form.Label>Job Role</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter job role"
                 value={editItem?.jobRole || ''}
                 onChange={(e) => setEditItem({ ...editItem, jobRole: e.target.value })}
-                required
               />
             </Form.Group>
-            <Form.Group className="mb-3">
+            <Form.Group controlId="employeeStatus" className="mb-3">
               <Form.Label>Status</Form.Label>
               <Form.Select
-                value={editItem?.status || 'Active'}
+                value={editItem?.status || ''}
                 onChange={(e) => setEditItem({ ...editItem, status: e.target.value })}
               >
                 <option value="Active">Active</option>
@@ -217,8 +187,8 @@ function Dashboard() {
             <Button variant="secondary" onClick={() => setShowModal(false)}>
               Cancel
             </Button>
-            <Button variant="primary" type="submit">
-              {editItem?.id > data.length ? 'Add' : 'Save Changes'}
+            <Button type="submit" variant="primary">
+              Save
             </Button>
           </Modal.Footer>
         </Form>
