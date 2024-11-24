@@ -14,46 +14,54 @@ function App() {
 
   return (
     <Router basename="/rbac-admin">
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        className="mt-3"
-        toastClassName="shadow-sm border-0"
-        bodyClassName="p-3"
-        style={{
-          width: 'auto',
-          maxWidth: '400px'
-        }}
-        toastStyle={{
-          background: '#fff',
-          borderRadius: '8px'
-        }}
-      />
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route 
-          path="/dashboard" 
-          element={
-            <ProtectedRoute>
-              <>
-                <Navbar />
-                <Dashboard />
-              </>
-            </ProtectedRoute>
-          } 
+      <div className="bg-dark text-white min-vh-100">
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          className="mt-3"
+          toastClassName="shadow-sm border-0"
+          bodyClassName="p-3"
+          style={{
+            width: 'auto',
+            maxWidth: '400px',
+          }}
+          toastStyle={{
+            background: '#333',
+            borderRadius: '8px',
+            color: '#fff',
+          }}
         />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+        <Routes>
+          <Route
+            path="/"
+            element={
+                <Login />     
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <div className="bg-dark text-white min-vh-100">
+                  <Navbar />
+                  <Dashboard />
+                </div>
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
     </Router>
   );
 }
 
-export default App; 
+export default App;

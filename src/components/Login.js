@@ -34,7 +34,7 @@ const Login = () => {
   };
 
   return (
-    <Container fluid className="bg-light min-vh-100">
+    <Container fluid className="bg-secondary min-vh-100">
       <Row className="justify-content-center align-items-center min-vh-100">
         <Col xs={11} sm={8} md={6} lg={4}>
           <Card className="shadow-lg border-0 rounded-lg">
