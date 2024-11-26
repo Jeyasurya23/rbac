@@ -9,13 +9,13 @@ The **RBAC (Role-Based Access Control) Admin Dashboard** is a React-based web ap
 ## **Screenshots**
 
 ### 1. Login Page
-![Login Page](https://files.oaiusercontent.com/file-EAXQ1xrwjvqN73oWHf9Pb7?se=2024-11-26T11%3A59%3A00Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D299%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D%257B2016597F-FE36-4C2E-A138-AF446853755D%257D.png&sig=gP0L0UIxTCMqdhfkWlLNJkGfHkeSws%2BX7RQbJ6kAO6g%3D)
+![Login Page](public/login.png)
 
 ### 2. Admin Dashboard
-![Admin Dashboard](https://files.oaiusercontent.com/file-Vb1CSCVNWvW5rZe8wWy9n1?se=2024-11-26T11%3A59%3A00Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D299%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D%257B93EF6A7A-6FFC-437B-974C-8092F6A6EE73%257D.png&sig=ZrBy5YWPwVlb3n5WqM%2BhXvBMF0JK81/vFhryGnDKSO0%3D)
+![Admin Dashboard](public/admin.png)
 
 ### 3. User Dashboard
-![User Dashboard](https://files.oaiusercontent.com/file-8LTPca8m736XSvFj1e43cr?se=2024-11-26T11%3A59%3A00Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D299%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D%257B4F25DE70-3A7A-438B-B394-2AD142048B42%257D.png&sig=K0lnZJPv%2BX7bm52xse/XiQBLgb/nxjrqBx0ZnFp7qTQ%3D))
+![User Dashboard](public/user.png)
 
 
 ---
